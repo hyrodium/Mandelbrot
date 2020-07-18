@@ -41,5 +41,5 @@ for i in 1:50
     col(z) = RGB(1,1,1) - isconv(z,i)*RGB(1,1,1)
     img = [col(z) for z in zs]
     img = imresize(img, (500,500))
-    save("mandelbrot"*string(i)*".png", img)
+    save("gif/mandelbrot"*string(i)*".png", img)
 end
