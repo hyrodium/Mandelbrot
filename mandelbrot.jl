@@ -24,12 +24,7 @@ function get_xy(canvas::Canvas)
     return xs, ys
 end
 
-canvas = Canvas(-2..2, -2..2, 500)
-
-xs, ys = get_xy(canvas)
-zs = [x+y*im for y in ys, x in xs]
-[RGB(norm(z),0,0) for z in zs]
-function isconv(c,n)
+function isconv_pow2(c,n)
     z = 0
     for i in 1:n
         z = z^2 + c
@@ -37,9 +32,64 @@ function isconv(c,n)
     return norm(z)<2
 end
 
+function isconv_pow3(c,n)
+    z = 0
+    for i in 1:n
+        z = z^3 + c
+    end
+    return norm(z)<2
+end
+
+function isconv_cos(c,n)
+    z = 0
+    for i in 1:n
+        z = cos(z) + c
+    end
+    return norm(z)<10
+end
+
+# Export images for gif animation
+canvas = Canvas(-2..2, -2..2, 500)
+xs, ys = get_xy(canvas)
+zs = [x+y*im for y in ys, x in xs]
 for i in 1:50
-    col(z) = RGB(1,1,1) - isconv(z,i)*RGB(1,1,1)
+    col(z) = RGB(1,1,1) - isconv_pow2(z,i)*RGB(1,1,1)
     img = [col(z) for z in zs]
     img = imresize(img, (500,500))
-    save("gif/mandelbrot"*string(i)*".png", img)
+    save("gif/mandelbrot_pow2_"*string(lpad(i,2,"0"))*".png", img)
 end
+
+# Export high resolution iamge
+canvas = Canvas(-2..2, -2..2, 2000)
+xs, ys = get_xy(canvas)
+zs = [x+y*im for y in ys, x in xs]
+col(z) = RGB(1,1,1) - isconv_pow2(z,500)*RGB(1,1,1)
+img = [col(z) for z in zs]
+save("high-resolution/mandelbrot_pow2.png", img)
+
+# Export images for gif animation
+canvas = Canvas(-2..2, -2..2, 500)
+xs, ys = get_xy(canvas)
+zs = [x+y*im for y in ys, x in xs]
+for i in 1:50
+    col(z) = RGB(1,1,1) - isconv_pow3(z,i)*RGB(1,1,1)
+    img = [col(z) for z in zs]
+    img = imresize(img, (500,500))
+    save("gif/mandelbrot_pow3_"*string(lpad(i,2,"0"))*".png", img)
+end
+
+# Export high resolution iamge
+canvas = Canvas(-2..2, -2..2, 2000)
+xs, ys = get_xy(canvas)
+zs = [x+y*im for y in ys, x in xs]
+col(z) = RGB(1,1,1) - isconv_pow3(z,500)*RGB(1,1,1)
+img = [col(z) for z in zs]
+save("high-resolution/mandelbrot_pow3.png", img)
+
+# Export images for gif animation
+canvas = Canvas(-5..6, -2..2, 300)
+xs, ys = get_xy(canvas)
+zs = [x+y*im for y in ys, x in xs]
+col(z) = RGB(1,1,1) - isconv_cos(z,300)*RGB(1,1,1)
+img = [col(z) for z in zs]
+save("mandelbrot_cos.png", img)
