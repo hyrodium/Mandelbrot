@@ -24,19 +24,22 @@ function get_xy(canvas::Canvas)
     return xs, ys
 end
 
-canvas = Canvas(-2..2, -2..2, 2000)
+canvas = Canvas(-2..2, -2..2, 500)
 
 xs, ys = get_xy(canvas)
 zs = [x+y*im for y in ys, x in xs]
 [RGB(norm(z),0,0) for z in zs]
-function isconv(c)
+function isconv(c,n)
     z = 0
-    for i in 1:100
+    for i in 1:n
         z = z^2 + c
     end
     return norm(z)<2
 end
 
-col(z) = RGB(1,1,1) - isconv(z)*RGB(1,1,0)
-img = [col(z) for z in zs]
-save("mandelbrot.png", img)
+for i in 1:50
+    col(z) = RGB(1,1,1) - isconv(z,i)*RGB(1,1,1)
+    img = [col(z) for z in zs]
+    img = imresize(img, (500,500))
+    save("mandelbrot"*string(i)*".png", img)
+end
