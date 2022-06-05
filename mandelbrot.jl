@@ -49,14 +49,14 @@ function isconv_cos(c,n)
 end
 
 # Export images for gif animation
-canvas = Canvas(-2..2, -2..2, 500)
+canvas = Canvas(-3..3, -3..3, 500)
 xs, ys = get_xy(canvas)
 zs = [x+y*im for y in ys, x in xs]
-for i in 1:50
+for i in 1:20
     col(z) = RGB(1,1,1) - isconv_pow2(z,i)*RGB(1,1,1)
     img = [col(z) for z in zs]
-    img = imresize(img, (500,500))
-    save("gif/mandelbrot_pow2_"*string(lpad(i,2,"0"))*".png", img)
+    # img = imresize(img, (500,500))
+    save("laser/mandelbrot_pow2_"*string(lpad(i,2,"0"))*".png", img)
 end
 
 # Export high resolution iamge
